@@ -1,0 +1,52 @@
+	#target.write(str(source.read(), sourceEncoding).encode(targetEncoding))
+	correctEncoding(source, target)
+	#temp=pd.read_csv('/tmp/VAERS/VAERSData/2008VAERSData/2008VAERSDATA.csv')
+	#temp.drop(temp.iloc[:, 36:50],axis=1)
+	#temp = temp.drop(temp.columns[:36:50], axis=1)
+	#temp.head()
+	#print(temp)
+	return 0
+
+def correctEncoding(filename, newFilename, encoding_to='UTF-8'):
+    with open(filename, 'r') as fr:
+        with open(newFilename, 'w', encoding=encoding_to) as fw:
+            for line in fr:
+                fw.write(line[:-1]+'\r\n')
+
+
+
+
+#import pandas as pd
+import csv
+
+def ConditionData(inputdata, outputdata):
+	with open(inputdata, 'r') as fr:
+		reader = csv.reader(fr)
+		with open(outputdata, 'w') as fw:
+			writer = csv.writer(fw)
+			unicode(writer).encode('UTF-8')
+			for i in reader:
+				i[35:].replace('')
+				writer.writerow(i[0:35])		
+
+def main(args):
+	sourceEncoding = "iso-8859-1"
+	targetEncoding = "utf-8"
+	source = "/home/aggitan/R/Project_12/VAERS/VAERSData/2008VAERSData/2008VAERSDATA.csv"
+	target = "/home/aggitan/R/Project_12/VAERS/VAERSData/2008VAERSData/2008VAERSDATA1.csv"
+	#1. Load source into memory
+	#2. Delete source file
+	#4. Modify source data
+	#3. Save source as target.
+	
+	ConditionData(source, target)
+	
+
+if __name__ == '__main__':
+    import sys
+    sys.exit(main(sys.argv))
+
+
+
+
+

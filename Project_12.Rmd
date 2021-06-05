@@ -1,0 +1,67 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+
+
+We've spent the past few days setting up an PostGreSQL database to help make this faster, let's connect to it:
+```{r}
+#install.packages("RPostgreSQL", "RPostgres")
+library(DBI)
+library(sqldf)
+library(RSQLite)
+
+usr <- ""
+psw <- {""}
+drv <- RPostgres::Postgres()
+hst <- "localhost"
+prt <- 5432
+dbn <- "project12"
+
+project12 <- dbConnect(drv, dbname = dbn, host = hst, port = prt, user = usr, password = psw)
+
+dbListTables(project12) 
+````
+
+
+
+
+
+And now let's take a looK at some of the table stats.
+````{r}
+#A sample of random rows:
+# randomrowQuery <- dbGetQuery(project10, "SELECT * FROM symptoms TABLESAMPLE SYSTEM ((1000 * 100) / 500000.0);")
+# randomrows <- data.frame(randomrowQuery)
+# randomrows
+
+#Number of rows
+numberofrowsQuery <- dbGetQuery(project12, "SELECT COUNT(VAERS_ID) from vaers;")
+numberofrows <- data.frame(numberofrowsQuery)
+numberofrows
+
+
+#distinct: 863345
+
+#Unique counties:
+# countiesQuery <- dbGetQuery(project10, "SELECT DISTINCT county_name FROM labresults;")
+# counties <- data.frame(countiesQuery)
+# counties
+
+#dbDisconnect(project10) 
+````
+
+Let's look at death 'n stuff.
+````{r}
+#Deathabase
+DataQuery <- dbGetQuery(project12, "SELECT age_yrs, sex, died from vaers WHERE died = 'Y' AND sex = 'M' AND age_yrs > '2';")
+AgeYearsDied <- data.frame(DataQuery)
+
+
+years <- (AgeYearsDied['age_yrs'])
+
+
+plot(as.numeric(years[,1]))
+
+````
